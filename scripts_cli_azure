@@ -1,0 +1,28 @@
+10:10 08/05/2022
+CNAM SMB11 - TP Azure Functions
+@tinepapa / Papa Mbaye TINE (code auditeur BRT539964)
+
+#Initialisation du Workspace avec Azure Functions Core Tools (v2)
+func init MyPythonFunctionApp --worker-runtime python (voir rapport du TP pour plus de détails)
+
+#Creation du groupe de ressource et du compte de stockage
+az group create -l westeurope -n functions-test
+az storage account create -l westeurope -g functions-test -n functionstest85 --sku Standard_LRS
+
+#Création des containers
+Crée automatiquement avec le tutorial d'upload d'image (voir rapport du TP)
+
+#Création ressource Computer vision
+az cognitiveservices account create --resource-group functions-test --name mycompvision001 --sku S1 --kind ComputerVision --location WestEurope --yes
+
+#Creation CosmosDB: compte, base de données, collection principale (mycollection) et collection leaves
+az cosmosdb create -g functions-test -n cosmosfunctiontest
+az cosmosdb database create -d cosmostest -n cosmosfunctiontest -g functions-test
+az cosmosdb collection create -c mycollection -n cosmosfunctiontest -g functions-test -d cosmostest --throughput 400
+az cosmosdb collection create -c leases -n cosmosfunctiontest -g functions-test -d cosmostest --throughput 400
+
+# Reccupération des informations de connexion à la database
+az cosmosdb list-keys --name cosmosfunctiontest --resource-group functions-test
+
+# Deploiement de la fonction dans le Cloud Azure
+Depuis la console VSCode (voir dans le rapport du TP)
